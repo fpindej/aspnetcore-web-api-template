@@ -5,9 +5,12 @@ namespace WebApiTemplate.Logging.Extensions;
 
 internal static class LoggerConfigurationExtensions
 {
-    public static void SetupLoggerConfiguration() => Log.Logger = new LoggerConfiguration()
-        .ConfigureBaseLogging()
-        .CreateLogger();
+    public static void SetupLoggerConfiguration()
+    {
+        Log.Logger = new LoggerConfiguration()
+            .ConfigureBaseLogging()
+            .CreateLogger();
+    }
 
     private static LoggerConfiguration ConfigureBaseLogging(
         this LoggerConfiguration loggerConfiguration)
