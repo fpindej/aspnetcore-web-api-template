@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiTemplate.WebApi", "WebApiTemplate.WebApi\WebApiTemplate.WebApi.csproj", "{8A49FD2E-9F22-4C71-9E0E-FC0E88268943}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiTemplate.Logging", "WebApiTemplate.Logging\WebApiTemplate.Logging.csproj", "{2E35587B-FD93-41F3-83F8-CADA304B4FAA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8A49FD2E-9F22-4C71-9E0E-FC0E88268943}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A49FD2E-9F22-4C71-9E0E-FC0E88268943}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A49FD2E-9F22-4C71-9E0E-FC0E88268943}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A49FD2E-9F22-4C71-9E0E-FC0E88268943}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E35587B-FD93-41F3-83F8-CADA304B4FAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E35587B-FD93-41F3-83F8-CADA304B4FAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E35587B-FD93-41F3-83F8-CADA304B4FAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E35587B-FD93-41F3-83F8-CADA304B4FAA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
