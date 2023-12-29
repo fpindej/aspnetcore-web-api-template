@@ -20,10 +20,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Extensions\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\WebApiTemplate.Logging\WebApiTemplate.Logging.csproj" />
     </ItemGroup>
 
