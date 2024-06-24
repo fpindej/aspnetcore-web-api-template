@@ -3,7 +3,7 @@ using Serilog.Events;
 
 namespace WebApiTemplate.Logging.Extensions;
 
-internal static class LoggerConfigurationExtensions
+public static class LoggerConfigurationExtensions
 {
     public static void SetupLoggerConfiguration()
     {
