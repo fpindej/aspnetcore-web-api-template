@@ -27,7 +27,7 @@ public class Startup
                 Log.Debug("Setting UseDeveloperExceptionPage");
                 app.UseDeveloperExceptionPage();
 
-                Log.Debug("Setting UseOpenApi");
+                Log.Debug("Setting UseSwagger");
                 app.UseSwagger();
 
                 Log.Debug("Setting UseSwaggerUI");
