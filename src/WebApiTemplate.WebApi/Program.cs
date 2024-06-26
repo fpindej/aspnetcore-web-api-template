@@ -8,7 +8,8 @@ public static class Program
     public static async Task<int> Main()
     {
         const string appName = "WebApiTemplate";
-        LoggerConfigurationExtensions.SetupLogger();
+        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+        LoggerConfigurationExtensions.SetupLogger(environmentName);
 
         try
         {
