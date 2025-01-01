@@ -8,6 +8,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "host", "host", "{0D9F29B4-A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "utils", "utils", "{0C33F9B2-8906-4EBD-9624-96362CAEAA12}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{45452CA3-E426-420C-BD6D-0F906A217B65}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.local.yml = ..\docker-compose.local.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
