@@ -1,45 +1,86 @@
+using Api.Extensions;
+using Api.Middlewares;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
-using LoggerConfigurationExtensions = WebApiTemplate.Logging.Extensions.LoggerConfigurationExtensions;
 
-namespace Api;
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Production;
+Log.Logger = Logging.Extensions.LoggerConfigurationExtensions.ConfigureMinimalLogging(environmentName);
+const string appName = "Web Api Template";
 
-public static class Program
+try
 {
-    public static async Task<int> Main()
-    {
-        const string appName = "WebApiTemplate";
-        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        LoggerConfigurationExtensions.SetupLogger(environmentName);
+    Log.Information("Starting web host: {appName}. Environment: {env}", appName, environmentName);
+    var builder = WebApplication.CreateBuilder(args);
 
-        try
+    Log.Debug("Use Serilog");
+    builder.Host.UseSerilog(
+        (context, _, loggerConfiguration) =>
         {
-            Log.Information("Starting web host {AppName}", appName);
-            await CreateHostBuilder().Build().RunAsync();
-            Log.Information("Ending web host {AppName}", appName);
-            return 0;
-            
-        }
-        catch (Exception e) when (e is not HostAbortedException)
-        {
-            Log.Fatal(e, "Host terminated unexpectedly {AppName}", appName);
-            return 1;
-        }
-        finally
-        {
-            await Log.CloseAndFlushAsync();
-        }
+            Logging.Extensions.LoggerConfigurationExtensions.SetupLogger(context.Configuration, loggerConfiguration);
+        }, preserveStaticLogger: true);
+
+    Log.Debug("Adding Services");
+    builder.Services.AddServices();
+
+    builder.Services.AddHealthChecks(builder.Configuration);
+
+    Log.Debug("Adding Controllers");
+    builder.Services.AddControllers();
+
+    Log.Debug("Adding Swagger for API documentation");
+    builder.Services.AddApiDefinition();
+
+    var app = builder.Build();
+
+    Log.Debug("Configuring CORS policy to allow any origin, header, and method");
+    app.UseCors(opt =>
+    {
+        opt.SetIsOriginAllowed(_ => true);
+        opt.AllowAnyHeader();
+        opt.AllowAnyMethod();
+    });
+    
+    Log.Debug("Enabling Swagger and SwaggerUI for API documentation");
+    app.UseCustomizedSwagger();
+
+    if (app.Environment.IsDevelopment())
+    {
+        Log.Debug("Development environment detected");
+
+        Log.Debug("Enabling Developer Exception Page");
+        app.UseDeveloperExceptionPage();
     }
 
-    private static IHostBuilder CreateHostBuilder()
+    Log.Debug("Enabling HTTPS redirection");
+    app.UseHttpsRedirection();
+
+    Log.Debug("Configuring request logging with Serilog");
+    app.UseSerilogRequestLogging();
+
+    Log.Debug("Adding custom exception handling middleware");
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+    Log.Debug("Configuring Authorization");
+    app.UseAuthorization();
+
+    Log.Debug("Mapping controller routes");
+    app.MapControllers();
+
+    Log.Debug("Mapping health checks");
+    app.MapHealthChecks("/health", new HealthCheckOptions
     {
-        return Host.CreateDefaultBuilder()
-            .UseSerilog(Log.Logger, dispose: true)
-            .ConfigureAppConfiguration((context, config) =>
-            {
-                var env = context.HostingEnvironment;
-                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-            })
-            .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
-    }
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    await app.RunAsync();
+}
+catch (Exception ex) when (ex is not HostAbortedException)
+{
+    Log.Fatal(ex, "Host terminated unexpectedly");
+}
+finally
+{
+    Log.Information("Shutting down application");
+    await Log.CloseAndFlushAsync();
 }
