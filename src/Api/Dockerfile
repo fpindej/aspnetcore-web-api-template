@@ -1,19 +1,23 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["WebApiTemplate.WebApi/WebApiTemplate.WebApi.csproj", "WebApiTemplate.WebApi/"]
-RUN dotnet restore "WebApiTemplate.WebApi/WebApiTemplate.WebApi.csproj"
+COPY ["Api/Api.csproj", "Api/"]
+COPY ["Logging/Logging.csproj", "Logging/"]
+RUN dotnet restore "Api/Api.csproj"
 COPY . .
-WORKDIR "/src/WebApiTemplate.WebApi"
-RUN dotnet build "WebApiTemplate.WebApi.csproj" -c Release -o /app/build
+WORKDIR "/src/Api"
+RUN dotnet build "Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "WebApiTemplate.WebApi.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false /p:DebugType=None /p:DebugSymbols=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "WebApiTemplate.WebApi.dll"]
+ENTRYPOINT ["dotnet", "Api.dll"]
