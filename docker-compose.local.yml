@@ -1,0 +1,22 @@
+services:
+  api:
+    build:
+      context: ./src/Api
+      dockerfile: Dockerfile
+    container_name: api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5001:8080"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    name: app-network
+
+volumes:
+  app-network_db_data:
+    driver: local
