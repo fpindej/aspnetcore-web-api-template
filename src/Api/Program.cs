@@ -2,6 +2,7 @@ using Api.Extensions;
 using Api.Middlewares;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 
 var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Production;
@@ -32,6 +33,12 @@ try
     builder.Services.AddApiDefinition();
 
     var app = builder.Build();
+    
+    Log.Debug("Configuring forwarded headers for proxies");
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    });
 
     Log.Debug("Configuring CORS policy to allow any origin, header, and method");
     app.UseCors(opt =>
