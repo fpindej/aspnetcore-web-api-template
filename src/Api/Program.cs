@@ -1,7 +1,7 @@
 using Serilog;
 using LoggerConfigurationExtensions = WebApiTemplate.Logging.Extensions.LoggerConfigurationExtensions;
 
-namespace WebApiTemplate.WebApi;
+namespace Api;
 
 public static class Program
 {
