@@ -21,7 +21,7 @@ try
         }, preserveStaticLogger: true);
 
     Log.Debug("Adding Services");
-    builder.Services.AddServices();
+    builder.Services.AddServices(builder.Configuration);
 
     builder.Services.AddHealthChecks(builder.Configuration);
 
