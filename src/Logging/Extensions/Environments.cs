@@ -1,4 +1,4 @@
-﻿namespace Alza.Logging;
+﻿namespace Logging.Extensions;
 
 /// <summary>
 /// Defines standard environment names used throughout the application.
